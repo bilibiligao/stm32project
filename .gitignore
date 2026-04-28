@@ -1,0 +1,19 @@
+# Build artifacts
+build/
+build_rom/
+*.elf
+*.hex
+*.bin
+*.map
+*.o
+*.d
+*.lst
+
+# IDE and environment
+.vscode/
+.cache/
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
