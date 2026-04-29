@@ -1,33 +1,8 @@
 /*
 ******************************************************************************
-**
-** @file        : STM32N6XX_LRUN.ld
-**
-** @author      : GPM Application Team
-**
-** @brief       : Linker script for STM32N6XX Device from STM32N6 series
-**                      2048 KBytes RAM
-**
-**                Set heap size, stack size and stack location according
-**                to application requirements.
-**
-**                Set memory bank area and size if external memory is used
-**
-**  Target      : STMicroelectronics STM32
-**
-**  Distribution: The file is distributed as is, without any warranty
-**                of any kind.
-**
-******************************************************************************
-** @attention
-**
-** Copyright (c) 2024 STMicroelectronics.
-** All rights reserved.
-**
-** This software is licensed under terms that can be found in the LICENSE file
-** in the root directory of this software component.
-** If no LICENSE file comes with this software, it is provided AS-IS.
-**
+** @file        : STM32N647X0HXQ_LRUN.ld
+** @brief       : Linker script for STM32N647 - LRUN with HyperRAM (XSPI1)
+**                Code in internal RAM, framebuffer in HyperRAM
 ******************************************************************************
 */
 
@@ -35,74 +10,72 @@
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = ORIGIN(RAM) + LENGTH(RAM); /* end of "RAM" Ram type memory */
+_estack = ORIGIN(RAM) + LENGTH(RAM);
 _sstack = _estack - _Min_Stack_Size;
 
-_Min_Heap_Size = 0x200; /* required amount of heap */
-_Min_Stack_Size = 0x800; /* required amount of stack */
+_Min_Heap_Size = 0x200;
+_Min_Stack_Size = 0x800;
 
 /* Memories definition */
 MEMORY
 {
   RAM    (xrw)    : ORIGIN = 0x34000400,   LENGTH = 2047K
+  EXTRAM (rw)     : ORIGIN = 0x90000000,   LENGTH = 8M
 }
 
 /* Sections */
 SECTIONS
 {
-  /* The startup code into "RAM" Ram type memory */
   .isr_vector :
   {
     . = ALIGN(4);
-    KEEP(*(.isr_vector)) /* Startup code */
+    KEEP(*(.isr_vector))
     . = ALIGN(4);
   } >RAM
 
-  /* The program code and other data into "RAM" Ram type memory */
   .text :
   {
     . = ALIGN(4);
-    *(.text)           /* .text sections (code) */
-    *(.text*)          /* .text* sections (code) */
-    *(.glue_7)         /* glue arm to thumb code */
-    *(.glue_7t)        /* glue thumb to arm code */
+    *(.text)
+    *(.text*)
+    *(.glue_7)
+    *(.glue_7t)
     *(.eh_frame)
-    *(.RamFunc)        /* .RamFunc sections */
-    *(.RamFunc*)       /* .RamFunc* sections */
+    *(.RamFunc)
+    *(.RamFunc*)
 
     KEEP (*(.init))
     KEEP (*(.fini))
 
     . = ALIGN(4);
-    _etext = .;        /* define a global symbols at end of code */
+    _etext = .;
   } >RAM
 
-  /* Constant data into "RAM" Ram type memory */
   .rodata :
   {
     . = ALIGN(4);
-    *(.rodata)         /* .rodata sections (constants, strings, etc.) */
-    *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
+    *(.rodata)
+    *(.rodata*)
     . = ALIGN(4);
   } >RAM
 
-  .ARM.extab   (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
-   {
-     . = ALIGN(4);
+  .ARM.extab   (READONLY) :
+  {
+    . = ALIGN(4);
     *(.ARM.extab* .gnu.linkonce.armextab.*)
     . = ALIGN(4);
   } >RAM
 
-  .ARM (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
-   {
-     . = ALIGN(4);
+  .ARM (READONLY) :
+  {
+    . = ALIGN(4);
     __exidx_start = .;
     *(.ARM.exidx*)
     __exidx_end = .;
     . = ALIGN(4);
   } >RAM
 
-  .preinit_array     (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
+  .preinit_array (READONLY) :
   {
     . = ALIGN(4);
     PROVIDE_HIDDEN (__preinit_array_start = .);
@@ -111,7 +84,7 @@ SECTIONS
     . = ALIGN(4);
   } >RAM
 
-  .init_array (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
+  .init_array (READONLY) :
   {
     . = ALIGN(4);
     PROVIDE_HIDDEN (__init_array_start = .);
@@ -121,7 +94,7 @@ SECTIONS
     . = ALIGN(4);
   } >RAM
 
-  .fini_array (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
+  .fini_array (READONLY) :
   {
     . = ALIGN(4);
     PROVIDE_HIDDEN (__fini_array_start = .);
@@ -131,55 +104,47 @@ SECTIONS
     . = ALIGN(4);
   } >RAM
 
-  /* Used by the startup to initialize data */
   _sidata = LOADADDR(.data);
 
-  /* Initialized data sections into "RAM" Ram type memory */
   .data :
   {
     . = ALIGN(4);
-    _sdata = .;        /* create a global symbol at data start */
-    *(.data)           /* .data sections */
-    *(.data*)          /* .data* sections */
-
+    _sdata = .;
+    *(.data)
+    *(.data*)
     . = ALIGN(4);
-    _edata = .;        /* define a global symbol at data end */
-
+    _edata = .;
   } >RAM
 
   .noncacheable :
   {
     . = ALIGN(8);
-    __snoncacheable = .;/* create symbol for start of section */
-    KEEP(*(noncacheable_buffer))
+    __snoncacheable = .;
+    KEEP(*(.noncacheable))
     . = ALIGN(8);
-    __enoncacheable = .;  /* create symbol for end of section */
+    __enoncacheable = .;
   } > RAM
 
   .gnu.sgstubs :
   {
     . = ALIGN(4);
-    *(.gnu.sgstubs*)   /* Secure Gateway stubs */
+    *(.gnu.sgstubs*)
     . = ALIGN(4);
   } >RAM
 
-  /* Uninitialized data section into "RAM" Ram type memory */
   . = ALIGN(4);
   .bss :
   {
-    /* This is used by the startup in order to initialize the .bss section */
-    _sbss = .;         /* define a global symbol at bss start */
+    _sbss = .;
     __bss_start__ = _sbss;
     *(.bss)
     *(.bss*)
     *(COMMON)
-
     . = ALIGN(4);
-    _ebss = .;         /* define a global symbol at bss end */
+    _ebss = .;
     __bss_end__ = _ebss;
   } >RAM
 
-  /* User_heap_stack section, used to check that there is enough "RAM" Ram  type memory left */
   ._user_heap_stack :
   {
     . = ALIGN(8);
@@ -190,7 +155,14 @@ SECTIONS
     . = ALIGN(8);
   } >RAM
 
-  /* Remove information from the compiler libraries */
+  /* HyperRAM framebuffer */
+  .EXTRAM (NOLOAD) :
+  {
+    . = ALIGN(8);
+    *(.EXTRAM)
+    . = ALIGN(8);
+  } >EXTRAM
+
   /DISCARD/ :
   {
     libc.a ( * )

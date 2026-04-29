@@ -36,7 +36,10 @@ HAL_SRC = \
     Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_rif.c \
     Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_exti.c \
     Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_dma.c \
-    Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_dma_ex.c
+    Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_dma_ex.c \
+    Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_ltdc.c \
+    Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_dma2d.c \
+    Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_xspi.c
 
 # Application sources
 APP_SRC = \
@@ -45,7 +48,12 @@ APP_SRC = \
     Appli/Core/Src/stm32n6xx_it.c \
     Appli/Core/Src/system_stm32n6xx_s.c \
     Appli/Core/Src/secure_nsc.c \
-    Drivers/BSP/LED/led.c
+    Appli/Core/Src/app_ui.c \
+    Drivers/BSP/LED/led.c \
+    Drivers/BSP/RGBLCD/rgblcd.c \
+    Drivers/BSP/KEY/key.c \
+    Drivers/BSP/HyperRAM/hyperram.c \
+    Drivers/BSP/SYS/sys.c
 
 # Startup (assembly)
 STARTUP_SRC = STM32CubeIDE/Appli/Application/User/Startup/startup_stm32n647x0hxq.s
@@ -74,6 +82,10 @@ INC_DIRS = \
     -IDrivers/CMSIS/Device/ST/STM32N6xx/Include \
     -IDrivers/STM32N6xx_HAL_Driver/Inc \
     -IDrivers/BSP/LED \
+    -IDrivers/BSP/RGBLCD \
+    -IDrivers/BSP/KEY \
+    -IDrivers/BSP/HyperRAM \
+    -IDrivers/BSP/SYS \
     -IAppli/Core/Inc \
     -ISecure_nsclib
 

@@ -14,6 +14,9 @@ extern "C" {
 #define HAL_PWR_MODULE_ENABLED
 #define HAL_CORTEX_MODULE_ENABLED
 #define HAL_RIF_MODULE_ENABLED
+#define HAL_DMA2D_MODULE_ENABLED
+#define HAL_LTDC_MODULE_ENABLED
+#define HAL_XSPI_MODULE_ENABLED
 
 /* ########################## Oscillator Values ############################# */
 #if !defined(HSE_VALUE)
@@ -64,6 +67,9 @@ extern "C" {
 #define USE_HAL_PWR_REGISTER_CALLBACKS          0U
 #define USE_HAL_CORTEX_REGISTER_CALLBACKS       0U
 #define USE_HAL_RIF_REGISTER_CALLBACKS          0U
+#define USE_HAL_DMA2D_REGISTER_CALLBACKS        0U
+#define USE_HAL_LTDC_REGISTER_CALLBACKS         0U
+#define USE_HAL_XSPI_REGISTER_CALLBACKS         0U
 
 /* Includes ------------------------------------------------------------------*/
 #ifdef HAL_RCC_MODULE_ENABLED
@@ -92,6 +98,18 @@ extern "C" {
 
 #ifdef HAL_PWR_MODULE_ENABLED
 #include "stm32n6xx_hal_pwr.h"
+#endif
+
+#ifdef HAL_DMA2D_MODULE_ENABLED
+#include "stm32n6xx_hal_dma2d.h"
+#endif
+
+#ifdef HAL_LTDC_MODULE_ENABLED
+#include "stm32n6xx_hal_ltdc.h"
+#endif
+
+#ifdef HAL_XSPI_MODULE_ENABLED
+#include "stm32n6xx_hal_xspi.h"
 #endif
 
 /* Exported macros -----------------------------------------------------------*/
